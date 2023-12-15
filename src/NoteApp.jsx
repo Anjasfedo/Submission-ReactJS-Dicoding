@@ -35,9 +35,6 @@ const NoteApp = () => {
     }
   }, [inputSearch]);
 
-  const notesAll = notes.filter((note) => !note.archived);
-  const notesArchive = notes.filter((note) => note.archived);
-
   const InputNewNoteHandler = (event) => {
     const { name, value } = event.target;
     setInputNote({
@@ -56,10 +53,20 @@ const NoteApp = () => {
       archived: false,
       createdAt: generateDate(),
     };
-    console.log(noteObj);
 
     setNotes([...notes, noteObj]);
   };
+
+  const changeArchiveHandler = (id) => {
+    setNotes((prevNote) =>
+      prevNote.map((note) =>
+        note.id === id ? { ...note, archived: !note.archived } : note
+      )
+    );
+  };
+
+  const notesAll = notes.filter((note) => !note.archived);
+  const notesArchive = notes.filter((note) => note.archived);
 
   return (
     <>
@@ -74,6 +81,7 @@ const NoteApp = () => {
         InputNewNoteHandler={InputNewNoteHandler}
         inputNote={inputNote}
         addNoteHandler={addNoteHandler}
+        changeArchiveHandler={changeArchiveHandler}
       />
     </>
   );

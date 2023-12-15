@@ -1,7 +1,8 @@
 import React from "react";
 import { showFormattedDate } from "../utils";
+import NoteButton from "./NoteButton";
 
-const NoteItem = ({ id, title, body, createdAt, archived, action }) => {
+const NoteItem = ({ id, title, body, createdAt, changeArchiveHandler }) => {
   return (
     <div className="note-item">
       <div className="note-item__content">
@@ -9,10 +10,7 @@ const NoteItem = ({ id, title, body, createdAt, archived, action }) => {
         <p className="note-item__date">{showFormattedDate(createdAt)}</p>
         <p className="note-item__body">{body}</p>
       </div>
-      <div className="note-item__action">
-        <button className="note-item__delete-button">Hapus</button>
-        <button className="note-item__archive-button">Arsipkan</button>
-      </div>
+      <NoteButton id={id} changeArchiveHandler={changeArchiveHandler} />
     </div>
   );
 };
