@@ -1,14 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { getInitialData } from "./utils";
+import { getInitialData, showFormattedDate } from "./utils";
 import NoteHeader from "./components/NoteHeader";
 import NoteBody from "./components/NoteBody";
 
 const NoteApp = () => {
-  const [initNotes, setinitNotes] = useState(getInitialData());
+  const [initNotes, setInitNotes] = useState(getInitialData());
 
-  const [notes, setnotes] = useState(initNotes);
+  const [notes, setNotes] = useState(initNotes);
 
   const [inputSearch, setInputSearch] = useState("");
+
+  const genereteId = () => +new Date();
+  const generateDate = () => new Date().toISOString();
+
+  const [inputNote, setInputNote] = useState({
+    title: "",
+    body: "",
+  });
 
   const handleChangeSearch = (event) => {
     const { value } = event.target;
@@ -17,18 +25,41 @@ const NoteApp = () => {
 
   useEffect(() => {
     if (inputSearch.length > 0) {
-      setnotes(
+      setNotes(
         notes.filter((note) =>
           note.title.toLowerCase().includes(inputSearch.toLowerCase())
         )
       );
     } else {
-      setnotes(initNotes)
+      setNotes(initNotes);
     }
   }, [inputSearch]);
 
   const notesAll = notes.filter((note) => !note.archived);
   const notesArchive = notes.filter((note) => note.archived);
+
+  const InputNewNoteHandler = (event) => {
+    const { name, value } = event.target;
+    setInputNote({
+      ...inputNote,
+      [name]: value,
+    });
+  };
+
+  const addNoteHandler = (event) => {
+    event.preventDefault();
+
+    const noteObj = {
+      id: genereteId(),
+      title: inputNote.title,
+      body: inputNote.body,
+      archived: false,
+      createdAt: generateDate(),
+    };
+    console.log(noteObj);
+
+    setNotes([...notes, noteObj]);
+  };
 
   return (
     <>
@@ -37,7 +68,13 @@ const NoteApp = () => {
         handleChangeSearch={handleChangeSearch}
       />
 
-      <NoteBody notesAll={notesAll} notesArchive={notesArchive} />
+      <NoteBody
+        notesAll={notesAll}
+        notesArchive={notesArchive}
+        InputNewNoteHandler={InputNewNoteHandler}
+        inputNote={inputNote}
+        addNoteHandler={addNoteHandler}
+      />
     </>
   );
 };
