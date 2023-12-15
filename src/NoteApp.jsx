@@ -1,34 +1,36 @@
+// Import necessary modules and components
 import React, { useEffect, useState } from "react";
 import { getInitialData } from "./utils";
 import NoteHeader from "./components/NoteHeader";
 import NoteBody from "./components/NoteBody";
 
+// Define the NoteApp functional component
 const NoteApp = () => {
-  // define variable
-  const [initNotes, setInitNotes] = useState(getInitialData());
-
-  const [notes, setNotes] = useState(initNotes);
-
-  const [inputSearch, setInputSearch] = useState("");
-
+  // State variables
+  const [initNotes, setInitNotes] = useState(getInitialData()); // Initial notes
+  const [notes, setNotes] = useState(initNotes); // Current notes
+  const [inputSearch, setInputSearch] = useState(""); // Search input
   const [inputNote, setInputNote] = useState({
+    // Input for new notes
     title: "",
     body: "",
   });
 
-  const genereteId = () => +new Date();
-  const generateDate = () => new Date().toISOString();
+  // Helper functions
+  const generateId = () => +new Date(); // Generate unique ID based on the current date
+  const generateDate = () => new Date().toISOString(); // Generate the current date in ISO format
 
-  const maxLength = 50;
+  const maxLength = 50; // Maximum length for input
 
-  // search
-
+  // Search functionality
   const handleChangeSearch = (event) => {
     const { value } = event.target;
+    // Batasi panjang input search sesuai maxLength
     if (value.length <= maxLength) setInputSearch(value);
   };
 
   useEffect(() => {
+    // Filter notes based on search input
     if (inputSearch.length > 0) {
       setNotes(
         notes.filter((note) =>
@@ -40,10 +42,10 @@ const NoteApp = () => {
     }
   }, [inputSearch]);
 
-  // add
-
+  // Add new note functionality
   const InputNewNoteHandler = (event) => {
     const { name, value } = event.target;
+    // Update state inputNote sesuai perubahan input
     setInputNote({
       ...inputNote,
       [name]: value,
@@ -53,20 +55,28 @@ const NoteApp = () => {
   const addNoteHandler = (event) => {
     event.preventDefault();
 
+    // Buat objek note baru dengan informasi yang diinput
     const noteObj = {
-      id: genereteId(),
+      id: generateId(),
       title: inputNote.title,
       body: inputNote.body,
       archived: false,
       createdAt: generateDate(),
     };
 
+    // Update state notes dengan menambahkan note baru
     setNotes([...notes, noteObj]);
+
+    // Reset inputNote setelah menambahkan note baru
+    setInputNote({
+      title: "",
+      body: "",
+    });
   };
 
-  // change value archive
-
+  // Change the value of archive functionality
   const changeArchiveHandler = (noteID) => {
+    // Update status archived pada note yang dipilih
     setNotes((prevNote) =>
       prevNote.map((note) =>
         note.id === noteID ? { ...note, archived: !note.archived } : note
@@ -74,17 +84,17 @@ const NoteApp = () => {
     );
   };
 
-  // delete
-
+  // Delete note functionality
   const deleteNoteHandler = (noteID) => {
-    setNotes((prevNote) => prevNote.filter((note) => note.id != noteID));
+    // Hapus note dengan id yang sesuai dari state notes
+    setNotes((prevNote) => prevNote.filter((note) => note.id !== noteID));
   };
 
-  // split note
-
+  // Separate notes into archived and non-archived
   const notesAll = notes.filter((note) => !note.archived);
   const notesArchive = notes.filter((note) => note.archived);
 
+  // Render NoteApp component
   return (
     <>
       <NoteHeader
@@ -106,4 +116,5 @@ const NoteApp = () => {
   );
 };
 
+// Export NoteApp component
 export default NoteApp;
