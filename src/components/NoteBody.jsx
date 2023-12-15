@@ -2,16 +2,15 @@ import React from "react";
 import NoteInput from "./NoteInput";
 import NoteList from "./NoteList";
 
-const NoteBody = ({ notes }) => {
-  const activeNote = notes.filter((note) => !note.archived);
-  const archiveNote = notes.filter((note) => note.archived);
+const NoteBody = ({ notesAll, notesArchive }) => {
+
   return (
     <div className="note-app__body">
       <NoteInput />
       <h2>Catatan aktif</h2>
-      <NoteList notes={activeNote} />
+      <NoteList notes={notesAll} />
       <h2>Arsipkan</h2>
-      <NoteList notes={archiveNote} />
+      <NoteList notes={notesArchive} />
     </div>
   );
 };

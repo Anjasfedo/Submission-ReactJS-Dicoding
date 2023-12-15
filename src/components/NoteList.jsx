@@ -5,6 +5,7 @@ const NoteList = ({ notes }) => {
   if (notes.length === 0) {
     return <p className="notes-list__empty-message">Tidak ada catatan</p>;
   }
+  console.log(notes);
 
   return (
     <>
