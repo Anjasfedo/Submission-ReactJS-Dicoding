@@ -1,26 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { getInitialData, showFormattedDate } from "./utils";
+import { getInitialData } from "./utils";
 import NoteHeader from "./components/NoteHeader";
 import NoteBody from "./components/NoteBody";
 
 const NoteApp = () => {
+  // define variable
   const [initNotes, setInitNotes] = useState(getInitialData());
 
   const [notes, setNotes] = useState(initNotes);
 
   const [inputSearch, setInputSearch] = useState("");
 
-  const genereteId = () => +new Date();
-  const generateDate = () => new Date().toISOString();
-
   const [inputNote, setInputNote] = useState({
     title: "",
     body: "",
   });
 
+  const genereteId = () => +new Date();
+  const generateDate = () => new Date().toISOString();
+
+  const maxLength = 50;
+
+  // search
+
   const handleChangeSearch = (event) => {
     const { value } = event.target;
-    setInputSearch(value);
+    if (value.length <= maxLength) setInputSearch(value);
   };
 
   useEffect(() => {
@@ -34,6 +39,8 @@ const NoteApp = () => {
       setNotes(initNotes);
     }
   }, [inputSearch]);
+
+  // add
 
   const InputNewNoteHandler = (event) => {
     const { name, value } = event.target;
@@ -57,13 +64,23 @@ const NoteApp = () => {
     setNotes([...notes, noteObj]);
   };
 
-  const changeArchiveHandler = (id) => {
+  // change value archive
+
+  const changeArchiveHandler = (noteID) => {
     setNotes((prevNote) =>
       prevNote.map((note) =>
-        note.id === id ? { ...note, archived: !note.archived } : note
+        note.id === noteID ? { ...note, archived: !note.archived } : note
       )
     );
   };
+
+  // delete
+
+  const deleteNoteHandler = (noteID) => {
+    setNotes((prevNote) => prevNote.filter((note) => note.id != noteID));
+  };
+
+  // split note
 
   const notesAll = notes.filter((note) => !note.archived);
   const notesArchive = notes.filter((note) => note.archived);
@@ -82,6 +99,8 @@ const NoteApp = () => {
         inputNote={inputNote}
         addNoteHandler={addNoteHandler}
         changeArchiveHandler={changeArchiveHandler}
+        deleteNoteHandler={deleteNoteHandler}
+        maxLength={maxLength}
       />
     </>
   );

@@ -1,11 +1,11 @@
 import React from "react";
 
-const NoteButton = ({ id, changeArchiveHandler }) => {
+const NoteButton = ({ id, changeArchiveHandler, deleteNoteHandler }) => {
   return (
     <div className="note-item__action">
       <button
         className="note-item__delete-button"
-        onClick={() => changeArchiveHandler(id)}
+        onClick={() => deleteNoteHandler(id)}
       >
         Hapus
       </button>

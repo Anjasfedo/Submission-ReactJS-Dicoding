@@ -1,7 +1,7 @@
 import React from "react";
 import NoteItem from "./NoteItem";
 
-const NoteList = ({ notes, changeArchiveHandler }) => {
+const NoteList = ({ notes, changeArchiveHandler, deleteNoteHandler }) => {
   if (notes.length === 0) {
     return <p className="notes-list__empty-message">Tidak ada catatan</p>;
   }
@@ -14,6 +14,7 @@ const NoteList = ({ notes, changeArchiveHandler }) => {
             key={note.id}
             {...note}
             changeArchiveHandler={changeArchiveHandler}
+            deleteNoteHandler={deleteNoteHandler}
           />
         ))}
       </div>
